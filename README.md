@@ -14,7 +14,13 @@ Navigate to `http://localhost:7474/browser/`
 
 ![index](https://github.com/Just1B/facebook-python-business-sdk-parser/raw/master/images/neo4j.png)
 
-![index](https://github.com/Just1B/facebook-python-business-sdk-parser/raw/master/images/fb_sdk_github.png)
+## GET AdObject and AdObjectFields
+
+```
+MATCH (ao:AdObject)<-[is_field:IS_FIELD]-(af:AdObjectField)
+RETURN ao,is_field,af
+LIMIT 25
+```
 
 # Licence
 

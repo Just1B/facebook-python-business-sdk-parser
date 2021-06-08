@@ -1,2 +1,3 @@
-- Generate relations between node fields
-- testing
+- [ X ] Generate relations between AdObject and AdObjectField
+- [ ] Generate relations between AdObjectField and other AdObject
+- [ ] Testing
