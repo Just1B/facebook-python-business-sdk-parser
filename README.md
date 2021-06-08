@@ -12,7 +12,7 @@ Parse the Facebook Python Business SDK and output in a local neo4j database
 
 Navigate to `http://localhost:7474/browser/`
 
-![index](https://github.com/Just1B/facebook-python-business-sdk-parser/raw/master/images/neo4j.png)
+![index](https://github.com/Just1B/facebook-python-business-sdk-parser/raw/master/images/neo4j_nodes.png)
 
 ## GET AdObject and AdObjectFields
 
