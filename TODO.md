@@ -1,3 +1,4 @@
-- [ X ] Generate relations between AdObject and AdObjectField
-- [ ] Generate relations between AdObjectField and other AdObject
+- [x] Generate relations between AdObject and AdObjectField
+- [x] Generate relations between AdObjectField and other AdObject
+- Formating neo4j connector
 - [ ] Testing

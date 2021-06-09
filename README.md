@@ -26,6 +26,12 @@ RETURN ao,af,ac,acf
 LIMIT 500
 ```
 
+## GET DISTINCT AdObjectFields types
+
+```
+MATCH (af:AdObjectField) RETURN DISTINCT af.type ORDER BY af.type
+```
+
 # Licence
 
 The MIT License

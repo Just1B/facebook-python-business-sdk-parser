@@ -33,6 +33,3 @@ class AdObjectField(LoggerMixin):
     def reset_ad_object_fields(self):
         with self._driver.session() as session:
             return session.write_transaction(self.reset_the_world)
-
-
-# MATCH (n:AdObject)<-[is_field:IS_FIELD]-(nf:AdObjectField) RETURN n,is_field,nf LIMIT 25

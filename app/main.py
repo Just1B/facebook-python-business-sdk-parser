@@ -10,6 +10,7 @@ from helpers.logger import get_app_logger
 from models.ad_object import AdObject
 from models.ad_object_field import AdObjectField
 from models.ad_object_class import AdObjectClass
+from models.ad_object_class_field import AdObjectClassField
 
 logger = get_app_logger("FACEBOOK_SDK_PARSER")
 
@@ -113,6 +114,7 @@ def main():
     logger.info(f"**** FOUND {len(TO_PROCESS)} files to parse ****\n")
 
     # RESET THE DATABASE
+    AdObjectClassField().reset_ad_object_class_fields()
     AdObjectClass().reset_ad_object_class()
     AdObjectField().reset_ad_object_fields()
     AdObject().reset_ad_objects()
@@ -137,7 +139,7 @@ def main():
 
                 ac_id = AdObjectClass().add_ad_object_class(id, {"class_name": z})
 
-                AdObjectClass().add_ad_object_class_fields(
+                AdObjectClassField().add_ad_object_class_fields(
                     ac_id, node["ad_object_class"][z]
                 )
 
