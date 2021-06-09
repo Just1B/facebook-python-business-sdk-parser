@@ -8,10 +8,10 @@ services:
     volumes:
       - ./app:/usr/src/app
     depends_on:
-      neo4j:
+      service-neo4j:
         condition: service_healthy
 
-  neo4j:
+  service-neo4j:
     image: neo4j:latest
     ports:
       - 7474:7474

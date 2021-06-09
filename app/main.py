@@ -9,6 +9,7 @@ from helpers.logger import get_app_logger
 
 from models.ad_object import AdObject
 from models.ad_object_field import AdObjectField
+from models.ad_object_class import AdObjectClass
 
 logger = get_app_logger("FACEBOOK_SDK_PARSER")
 
@@ -31,18 +32,10 @@ def parse_tree(filename, tree):
             "readable_name": None,
         },
         "ad_object_fields": [],
+        "ad_object_class": {},
     }
 
     for ctx in tree.body:
-
-        # WE TARGET THE FIRST CLASS FROM SDK ADOBJECT
-        # class XYZ():
-        #     class Field(): -> contain all request params
-        #
-        #     _field_types {
-        #       name : string,
-        #       url : string
-        #     }
 
         # https://docs.python.org/3/library/ast.html#ast.ClassDef
         if isinstance(ctx, ast.ClassDef):
@@ -51,6 +44,23 @@ def parse_tree(filename, tree):
             node["ad_object"]["readable_name"] = class_name_to_readable(ctx.name)
 
             for ctx2 in ctx.body:
+
+                # Fields for request params
+                # Other class for params types
+
+                # class XYZ():
+                #     class Field(): -> contain all request params
+                #
+                #     _field_types {
+                #       name : string,
+                #       url : string,
+                #       text : TextType
+                #     }
+
+                #     class TextType:
+                #       custom = 'custom'
+                #       disclaimer = 'disclaimer'
+                #       from_price = 'from_price'
 
                 # https://docs.python.org/3/library/ast.html#ast.Assign
                 # https://docs.python.org/3/library/ast.html#ast.Name
@@ -74,7 +84,20 @@ def parse_tree(filename, tree):
                             }
                         )
 
-            # node["ad_object_fields"] = json.dumps(node["ad_object_fields"])
+                # We already parsed fields, just need other class
+                if isinstance(ctx2, ast.ClassDef) and ctx2.name != "Field":
+
+                    node["ad_object_class"][ctx2.name] = []
+
+                    # list on ast.Assign
+                    for x in ctx2.body:
+
+                        node["ad_object_class"][ctx2.name].append(
+                            {
+                                "field": str(x.targets[0].id),
+                                "type": str(x.value.value),
+                            }
+                        )
 
     return node
 
@@ -90,6 +113,7 @@ def main():
     logger.info(f"**** FOUND {len(TO_PROCESS)} files to parse ****\n")
 
     # RESET THE DATABASE
+    AdObjectClass().reset_ad_object_class()
     AdObjectField().reset_ad_object_fields()
     AdObject().reset_ad_objects()
 
@@ -108,6 +132,14 @@ def main():
             id = AdObject().add_ad_object(node["ad_object"])
 
             AdObjectField().add_ad_object_fields(id, node["ad_object_fields"])
+
+            for z in node["ad_object_class"]:
+
+                ac_id = AdObjectClass().add_ad_object_class(id, {"class_name": z})
+
+                AdObjectClass().add_ad_object_class_fields(
+                    ac_id, node["ad_object_class"][z]
+                )
 
         except Exception as error:
 

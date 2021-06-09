@@ -14,12 +14,16 @@ Navigate to `http://localhost:7474/browser/`
 
 ![index](https://github.com/Just1B/facebook-python-business-sdk-parser/raw/master/images/neo4j_nodes.png)
 
+![index](https://github.com/Just1B/facebook-python-business-sdk-parser/raw/master/images/neof4j_adobject_fields_class.png)
+
 ## GET AdObject and AdObjectFields
 
 ```
-MATCH (ao:AdObject)<-[is_field:IS_FIELD]-(af:AdObjectField)
-RETURN ao,is_field,af
-LIMIT 25
+MATCH (ao:AdObject)<-[r:IS_FIELD]-(af:AdObjectField)
+MATCH (ao)<-[c:IS_CLASS]-(ac:AdObjectClass)
+MATCH (ac)<-[cf:IS_CLASS_FIELD]-(acf:AdObjectClassField)
+RETURN ao,af,ac,acf
+LIMIT 500
 ```
 
 # Licence
